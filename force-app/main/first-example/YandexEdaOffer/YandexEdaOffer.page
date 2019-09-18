@@ -1,0 +1,344 @@
+<!--
+ - Created by user on 12.09.2019.
+ -->
+
+<apex:page id="YandexEdaOffer" controller="YandexEdaOfferController" standardStylesheets="false">
+    <apex:image url="{!$Resource.yandex}" style="width:100%; height:500px"/>
+    <apex:includeScript value="{!$Resource.jquery515}"/>
+    <apex:includeScript value="{!$Resource.maskedinput}"/>
+    <apex:form>
+
+
+        <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/css/suggestions.min.css"
+              rel="stylesheet"/>
+        <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/js/jquery.suggestions.min.js"></script>
+        <style>
+            .subcontainer {
+                font-size: 10px;
+            }
+
+            .comment {
+                font-size: 12px;
+            }
+
+            .message {
+                color: red;
+            }
+            .blue-text {
+                color: blue;
+            }
+        </style>
+        <script type="text/javascript">
+
+          /* $("#city").suggestions({
+            token: "a95c52b4b782324e3ec6f197df2051e26476411c",
+            type: "ADDRESS",
+            hint: false,
+            bounds: "city",
+            onSelect: function(suggestion) {
+              console.log(suggestion);
+            }
+          }); */
+
+          function validateForm() {
+
+            if (!document.getElementById('agree').checked) {
+              document.getElementById('message').innerText = 'Необходимо подтвердить согласие';
+              return false;
+            }
+
+            $("input[name='RestName']").blur(function() {
+              var restName = $("#RestName").val();
+              var filter = /^((?!\d{4}).)*$/;
+              if (!filter.test(restName)) {
+                document.getElementById('message').innerText = 'Некорректный формат названия ресторана';
+                return false;
+              }
+            });
+
+            $("input[name='checkingAcc']").blur(function() {
+              var checkingAcc = $("#checkingAcc").val();
+              var filter = /^[0-9]{20}$/;
+              if (!filter.test(checkingAcc)) {
+                document.getElementById('message').innerText = 'Некорректный формат расчетного счета';
+                return false;
+              }
+            });
+            $("input[name='phone']").blur(function() {
+              var mobile = $("#phone").val();
+              var filter = /^((\+7)+\(([0-9]){3}\)([0-9]){3}\-([0-9]){4})$/;
+              if (!filter.test(mobile)) {
+                document.getElementById('message').innerText = 'Некорректный номер телефона';
+                return false;
+              }
+            });
+            $("input[name='email']").blur(function() {
+              var mail = $("#email").val();
+              var filter = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+              if (!filter.test(mail)) {
+                document.getElementById('message').innerText = 'Некорректный адрес электронной почты';
+                return false;
+              }
+            });
+          }
+          var RestName = document.getElementById("RestName").value;
+          var party = document.getElementById("party").value;
+          var bank = document.getElementById("bank").value;
+          var checkingAcc = document.getElementById("checkingAcc").value;
+          var phone = document.getElementById("phone").value;
+          var mail = document.getElementById("mail").value;
+          var site = document.getElementById("site").value;
+          var index = document.getElementById("index").value;
+          var city = document.getElementById("city").value;
+          var address = document.getElementById("address").value;
+
+          var fullName = document.getElementById("fullName").value;
+
+          var city_u = document.getElementById("city_u").value;
+          var index_u = document.getElementById("index_u").value;
+          var street_u = document.getElementById("street_u").value;
+          var flat_u = document.getElementById("flat_u").value;
+
+          var OGRN = document.getElementById("OGRN").value;
+          var INN = document.getElementById("INN").value;
+          var KPP = document.getElementById("KPP").value;
+
+          var signerName = document.getElementById("signerName").value;
+          var signerPosition = document.getElementById("signerPosition").value;
+
+          var BIK = document.getElementById("BIK").value;
+          var CorrAcc = document.getElementById("CorrAcc").value;
+
+          var NDS = "20%";
+          if ($("#nocheck").is(":checked")) {
+            NDS = "Не облагается";
+          }
+
+          afunction(RestName, party, bank, checkingAcc, phone, mail, site, index, city, address, fullName, city_u, NDS, index_u, street_u, flat_u, OGRN, INN, KPP, signerName, signerPosition, BIK, CorrAcc);
+          }
+
+
+        </script>
+        <apex:pageBlock>
+            <div id="tj" align="center">
+                    <table class="annotation" align="center">
+                        <tr>
+                            <td>
+                                <span style="font-size: 14px;">
+                                    Для начала работы с сервисом, пожалуйста,<br>
+                                    ознакомьтесь и согласитесь с условиями Оферты,</br>
+                                    а также внесите реквизиты. Договор будет<br>
+                                    считаться подписанным после оплаты платежного</br>
+                                    поручения. Платежное поручение будет<br>
+                                    отправлено на электронную почту после проверки</br>
+                                    заполненной информации.
+                                    <br/>
+                                    <br/>
+                                </span>
+                            </td>
+                        </tr>
+                        <br/>
+                        <tr>
+                            <td>
+                                <span class="blue-text">Оферта на оказание услуг "Яндекс.Еда"</span>
+                                <br/>
+                                <br/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span style="font-size: 15px;">
+                                    Стоимость Услуг "Яндекс.Еда" в отношении одного<br>
+                                    оформленного Пользователем Заказа при выборе</br>
+                                    Пользователем способа оплаты наличным<br>
+                                    платежом в случае, если доставка Товара</br>
+                                    осуществляется Доставщиком - 7.0%(в том числе<br>
+                                    НДС) от общей стоимости Заказа</br>
+                                    <br/>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span style="font-size: 15px;">
+                                    Стоимость Услуг "Яндекс.Еда" в отношении одного<br>
+                                    оформленного Пользователем Заказа при выборе</br>
+                                    Пользователем способа оплаты безналичным<br>
+                                    платежом в случае, если доставка Товара</br>
+                                    осуществляется Доставщиком - <span class="blue-text">19.0%</span> (в том числе<br>
+                                    НДС) от общей стоимости Заказа.</br>
+                                    <br/>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span style="font-size: 13px;">
+                                    Стоимость Услуг "Яндекс.Еда", определяемая в соответствии с пп.<br>
+                                    1.2 выше, включает вознаграждение за исполнение Поручения и</br>
+                                    Поручительство в соответствии с Офертой.
+                                    <br/>
+                                    <br/>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                    <table align="center">
+                        <tr>
+                            <td><apex:outputLabel value="Внесите реквизиты" style="font-size: 25px;"/></td>
+                            <td/>
+                        </tr>
+                    </table>
+                    <br/>
+                    <table align="center">
+                        <tr>
+                            <td><apex:outputLabel value="Название ресторана" for="{! offer.RestName__c }"/></td>
+                            <td><input value="{! offer.RestName__c }" id="RestName" name="RestName"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Название предприятия или ИНН" for="{! offer.OrgINN__c }"/></td>
+                            <td><input id="party" name="party" type="text" value="{! offer.OrgINN__c }"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Полное название предприятия" for="{! offer.AccountFullName__c }"/></td>
+                            <td><input id="fullName" name="fullName" value="{! offer.AccountFullName__c }" disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Юридический адрес"/></td>
+                            <td>
+                                <table class="subcontainer" style="width:60%">
+                                    <tr>
+                                        <td><apex:outputLabel value="Город" for="{! offer.City__c }"/></td>
+                                        <td><apex:outputLabel value="Индекс" for="{! offer.Index__c }"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input id="city_u" name="city_u" value="{! offer.City__c }" disabled="disabled"/></td>
+                                        <td><input id="index_u" name="index_u" value="{! offer.Index__c }" disabled="disabled"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><apex:outputLabel value="Улица" for="{! offer.Street__c }"/></td>
+                                        <td><apex:outputLabel value="Дом, офис, кв." for="{! offer.Apartments__c }"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input  id="street_u" name="street_u" value="{! offer.Street__c }" disabled="disabled"/></td>
+                                        <td><input  id="flat_u" name="flat_u" value="{! offer.Apartments__c }" disabled="disabled"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="ОГРН" for="{! offer.OGRN__c }"/></td>
+                            <td><input id="OGRN" name="OGRN" value="{! offer.OGRN__c }" disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="ИНН" for="{! offer.INN__c }"/></td>
+                            <td><input id="INN" name="INN" value="{! offer.INN__c }" disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="КПП" for="{! offer.KPP__c }"/></td>
+                            <td><input id="KPP" name="KPP" value="{! offer.KPP__c }" disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel for="NDS" value="Применяемая ставка НДС"/></td>
+                            <td>
+                            <apex:selectRadio value="{!offer.NDS__c}" id="NDS">
+                                <apex:selectOptions value="{!types}"></apex:selectOptions>
+                            </apex:selectRadio>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Название банка" for="{! offer.BankName__c }"/></td>
+                            <td><input type="text" id="bank" name="bank" value="{! offer.BankName__c }"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Расчетный счет" for="{! offer.CheckingAcc__c }"/></td>
+                            <td><input type="text" id="checkingAcc" name="checkingAcc" value="{! offer.CheckingAcc__c }"/><span class="comment">20 цифр</span><br/>
+                                <div class="comment">Внимание! По этим реквизитам будут <br/>производиться взаиморасчеты с Яндекс.Еда</div></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="БИК Банка" for="{! offer.BankBIK__c }"/></td>
+                            <td><input id="BIK" name="BIK" value="{! offer.BankBIK__c }" disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Кор. счет" for="{! offer.CorAcc__c }"/></td>
+                            <td><input id="CorrAcc" name="CorrAcc" value="{! offer.CorAcc__c }" disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Телефон бухгалтерии" for="{! offer.Accounting_Phone__c }"/></td>
+                            <td><input id="phone" name="phone" value="{! offer.Accounting_Phone__c }"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Электронная почта бухгалтерии" for="{! offer.AccountingEmail__c }"/></td>
+                            <td><input id="mail" name="mail" value="{! offer.AccountingEmail__c }"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Сайт ресторана" for="{! offer.Website__c }"/></td>
+                            <td><input id="site" name="site" value="{! offer.Website__c }"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Адрес для корреспонденции"/></td>
+                            <td><input type="checkbox" id="matches" name="matches" value="{! matchesBilling }"/>Совпадает с юридическим</td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Индекс" for="{! offer.BillingIndex__c }"/></td>
+                            <td><input id="index" name="index" value="{!offer.BillingIndex__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Город" for="{! offer.BillingCity__c }"/></td>
+                            <td><input id="city" name="city" value="{!offer.BillingCity__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Адрес" for="{! offer.BillingAddress__c }"/></td>
+                            <td><input id="address" name="address" value="{!offer.BillingAddress__c}"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Имя подписанта в именительном падеже" for="{! offer.SignerName__c }"/></td>
+                            <td><input id="signerName" name="signerName" value="{!offer.SignerName__c}" disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td><apex:outputLabel value="Должность подписанта" for="{! offer.SignerPosition__c }"/></td>
+                            <td><input id="signerPosition" name="signerPosition" value="{!offer.SignerPosition__c}" disabled="disabled"/></td>
+                        </tr>
+                    </table>
+                <br/>
+                <input id="agree" name="agree" type="checkbox" value="1"/>Подтверждаю свое ознакомление и соглашаюсь с
+                условиями Оферты на оказание услуг "Яндекс.Еда"<br/>
+                <br/>
+                <button id="submit" type="submit" style="background-color: gold"
+                        onclick="validateForm(); return false;">Отправить
+                </button>
+                <p style="text-align: center"> © 2019 Яндекс </p>
+                <apex:actionFunction name="afunction" action="{!save}" onComplete="alert('Completed');">
+                    <apex:param id="RestName" name="RestName" value="" />
+                    <apex:param id="party" name="party" value="" />
+                    <apex:param id="bank" name="bank" value="" />
+                    <apex:param id="checkingAcc" name="checkingAcc" value="" />
+                    <apex:param id="phone" name="phone" value="" />
+                    <apex:param id="mail" name="mail" value="" />
+                    <apex:param id="site" name="site" value="" />
+                    <apex:param id="index" name="index" value="" />
+                    <apex:param id="city" name="city" value="" />
+                    <apex:param id="address" name="address" value="" />
+
+                    <apex:param id="fullName" name="fullName" value="" />
+
+                    <apex:param id="city_u" name="city_u" value="" />
+                    <apex:param id="index_u" name="index_u" value="" />
+                    <apex:param id="street_u" name="street_u" value="" />
+                    <apex:param id="flat_u" name="flat_u" value="" />
+
+                    <apex:param id="OGRN" name="OGRN" value="" />
+                    <apex:param id="INN" name="INN" value="" />
+                    <apex:param id="KPP" name="KPP" value="" />
+
+                    <apex:param id="signerName" name="signerName" value="" />
+                    <apex:param id="signerPosition" name="signerPosition" value="" />
+
+                    <apex:param id="BIK" name="BIK" value="" />
+                    <apex:param id="CorrAcc" name="CorrAcc" value="" />
+                </apex:actionFunction>
+            </div>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -3,104 +3,220 @@
  -->
 
 <apex:page id="partner" standardStylesheets="false" showHeader="false">
-
-
+    <apex:includeScript value="{!$Resource.jquery515}"/>
+    <apex:includeScript value="{!$Resource.maskedinput}"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/css/suggestions.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/css/suggestions.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/suggestions-jquery@19.8.0/dist/js/jquery.suggestions.min.js"></script>
 
-   <script>
-      $(function() {
-        $("#phone").mask("+7 (999) 999-9999", {
-          completed: function() {
-            alert("Вы ввели номер: " + this.val());
-          }
-        });
-      });
-    </script>
-    <style>
-        .message{
-            font-size: 12px;
-        }
-    </style>
-    <div align="center">
-    <form name="myForm" action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST" onsubmit="return validateForm()">
-
+    <form action="https://test.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8" method="POST">
         <input type="hidden" name="oid" value="00D0E000000A7hg"/>
-        <input type="hidden" name="retURL" value="http://"/>
+        <input type="hidden" name="retURL" value="https://platform-enterprise-6198-dev-ed--c.visualforce.com/apex/thanks"/>
+
+        <style>
+            .error {
+                outline: 1px solid red;
+            }
+
+            .fields {
+                font-family: Arial;
+                font-size: 14px;
+                display: flex;
+                justify-content: center; /*Центрирование по горизонтали*/
+                align-items: center; /*Центрирование по вертикали */
+            }
+
+            .checkbox {
+                font-family: Arial;
+                font-size: 14px;
+                display: flex;
+                justify-content: center; /*Центрирование по горизонтали*/
+                margin-right: 19%;
+            }
+
+            .messages {
+                width: 400px;
+                font-size: 10px;
+                text-align: left;
+                white-space: nowrap;
+                margin-left: 37%;
+            }
+        </style>
+
+          <script>
+            function validateForm() {
+              sIsEmpty = false;
+              var allInputs = $("#last_name, #phone, #email, #company, #city");
+              $.each(allInputs, function(index, value) {
+                if (value.value === '') {
+                  value.style.borderColor = 'red';
+                  sIsEmpty = true;
+                }
+              });
+
+              if (sIsEmpty) {
+                document.getElementById('message').innerText = 'Введите информацию в обязательные поля';
+                return false;
+              }
+            }
+
+            $(document).ready(function() {
+
+              // Имя
+              $("input[name='last_name']").blur(function() {
+                var last_name = $("#last_name").val();
+                var filter = /^(?:[a-zA-Z\s]+)|(?:[а-яА-Я\s]+)$/;
+                if (!filter.test(last_name)) {
+                  $(this).addClass("error");
+                } else {
+                  $(this).removeClass("error");
+                }
+              });
+
+              // Телефон
+              $("#phone").mask("+7(999)999-99-99");
+
+              $("input[name='phone']").blur(function() {
+                var phone = $("#phone").val();
+                var filter = /^((\+7)+\(([0-9]){3}\)([0-9]){3}\-([0-9]){4})$/;
+                if (!filter.test(phone)) {
+                  $(this).addClass("error");
+                } else {
+                  $(this).removeClass("error");
+                }
+              });
+
+              // Почта
+              $("input[name='email']").blur(function() {
+                var email = $("#email").val();
+                var filter =  /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+                if (!filter.test(email)) {
+                  $(this).addClass("error");
+                } else {
+                  $(this).removeClass("error");
+                }
+              });
+
+              // Название ресторана
+              $("input[name='company']").blur(function() {
+                var company = $("#company").val();
+                var filter = /^(?:[a-zA-Z\s]+)|(?:[а-яА-Я\s]+)$/;
+                if (!filter.test(company)) {
+                  $(this).addClass("error");
+                } else {
+                  $(this).removeClass("error");
+                }
+              });
+
+              // Город
+              $("input[name='city']").blur(function() {
+                var city = $("#city").val();
+                var filter = /^(?:[a-zA-Z\s]+)|(?:[а-яА-Я\s]+)$/;
+                if (!filter.test(city)) {
+                  $(this).addClass("error");
+                } else {
+                  $(this).removeClass("error");
+                }
+              });
+
+              // Адрес
+              $("input[name='00N0E000006mxCr']").blur(function() {
+                var address = $("#00N0E000006mxCr").val();
+                var filter = /^(?:[a-zA-Z\s]+)|(?:[а-яА-Я\s]+)$/;
+                if (!filter.test(address)) {
+                  $(this).addClass("error");
+                } else {
+                  $(this).removeClass("error");
+                }
+              });
+            });
+        </script>
+
+        <apex:image url="{!$Resource.yandex}" style="width:100%; height:500px"/>
 
 
-        <input type="hidden" name="debug" value="1"/>
-        <input type="hidden" name="debugEmail" value="mdashulia@gmail.com"/>
+        <table class="fields">
+            <tr>
+                <td align="center" colspan="4">
+                    <div id="message" style="width:400px; font-size:12px; color:#ff0000;" align="center">
+                        &nbsp;
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="last_name">* Имя </label></td>
+                <td><input id="last_name" maxlength="80" name="last_name" size="25" type="text"/></td>
+            </tr>
+            <tr>
+                <td><label for="phone">* Телефон </label></td>
+                <td><input id="phone" maxlength="40" name="phone" size="25" type="text"/></td>
+            </tr>
+            <tr>
+                <td><label for="email">* Электронная почта </label></td>
+                <td><input id="email" maxlength="80" name="email" size="25" type="text"/></td>
+            </tr>
+            <tr>
+                <td><label for="company">* Название ресторана </label></td>
+                <td><input id="company" maxlength="40" name="company" size="25" type="text"/></td>
+            </tr>
+            <tr>
+                <td><label for="city">* Город </label></td>
+                <td><input id="city" maxlength="40" name="city" size="25" type="text"/></td>
+            </tr>
 
-        <apex:image url="{!$Resource.yandex}" style = "width:100%; height:500px"/>
-        <apex:includeScript value="{!$Resource.jquery234}"/>
-        <apex:includeScript value="{!$Resource.maskedinput}"/>
-        <div id="message" style="display:none; color: #ff0000; text-align: center">Пожалуйста, введите информацию в обязательные поля</div>
-        <table style="width:50%; align-self: center">
+            <tr>
+                <td>* Адрес (ул., дом):</td>
+                <td><input id="00N0E000006mxCr" maxlength="255" name="00N0E000006mxCr" size="25" type="text"/></td>
+            </tr>
+            <tr>
+                <td><label for="url"> Сайт ресторана </label></td>
+                <td><input id="url" maxlength="80" name="url" size="25" type="text"/></td>
+            </tr>
+            <tr>
+                <td></td>
 
-            <tr>
-                <td><label for="last_name">Имя </label></td>
-                <td><input id="last_name" maxlength="40" name="last_name" size="20" type="text"/></td>
+                <td>
+                    <span style="font-size: 10px;">
+                    Если нет сайта, можете добавить ссылку на<br>
+                    страницу в социальной сети.</br>
+                    </span>
+                </td>
             </tr>
             <tr>
-                <td><label for="phone">Телефон </label></td>
-                <td><input id="phone" maxlength="40" name="phone" size="20" type="text"/></td>
-            </tr>
-            <tr>
-                <td><label for="email">Электронная почта </label></td>
-                <td><input id="email" maxlength="80" name="email" size="20" type="text"/></td>
-            </tr>
-            <tr>
-                <td><label for="company">Название ресторана </label></td>
-                <td><input id="company" maxlength="40" name="company" size="20" type="text"/></td>
-            </tr>
-            <tr>
-                <td><label for="city">Город </label></td>
-                <td><input id="city" maxlength="40" name="city" size="20" type="text"/></td>
-            </tr>
-      <script>
-      $(function() {
-        $("#city").suggestions({
-          token: "a95c52b4b782324e3ec6f197df2051e26476411c",
-          type: "ADDRESS",
-          hint: false,
-          bounds: "city",
-          constraints: {
-            label: "",
-            locations: { city_type_full: "город" }
-          },
-          /* Вызывается, когда пользователь выбирает одну из подсказок */
-          onSelect: function(suggestion) {
-            console.log(suggestion);
-          }
-        });
-      });
-    </script>
-            <tr>
-                <td>Адрес (ул., дом):</td>
-                <td><input id="00N0E000006mxCr" maxlength="255" name="00N0E000006mxCr" size="20" type="text"/></td>
-            </tr>
-            <tr>
-                <td><label for="url">Сайт ресторана </label></td>
-                <td><input id="url" maxlength="80" name="url" size="20" type="text"/></td>
-            </tr>
-            <tr>
-                <td>Комментарии:</td>
-                <td><input id="00N0E000006mxCt" maxlength="255" name="00N0E000006mxCt" size="20" type="text"/></td>
-            </tr>
-            <tr>
-                <td>Согласен:</td>
-                <td><input id="00N0E000006mxCs" name="00N0E000006mxCs" type="checkbox" value="1"/></td>
+                <td> Комментарии:</td>
+                <td><input id="00N0E000006mxCt" maxlength="255" name="00N0E000006mxCt" size="25" type="text"/></td>
             </tr>
         </table>
-        <p class="message">Я даю ООО "Яндекс" и ООО "Яндекс.Еда" согласие на обработку моих<br/>
-            персональных данных в соответствии с Федеральным Законом от 27.07.2008 года<br/>
-            N152-ФЗ "О персональных данных" на условиях и для целей, определенных в этой<br/>
-            заявке и в Политике конфиденциальности, -yandex.ru/legal/confidential-<br/>
-            ознакомление с которой я подтверждаю, в течение срока, необходимого для<br/>
-            достижения указанных целей, и 5 лет после их достижения.</p>
-        <input type="submit" name="submit" onclick="validateForm()" style="background-color: gold"/>
+        <table class="checkbox">
+            <tr>
+                <td>*<input id="00N0E000006mxCs" name="00N0E000006mxCs" type="checkbox" value="1"/></td>
+                <td> Согласен</td>
+            </tr>
+        </table>
+        <table class="messages">
+            <span>
+                <tr>
+                    <td>
+                        Я даю ООО "Яндекс" и ООО "Яндекс.Еда" согласие на обработку моих<br/>
+                        персональных данных в соответствии с Федеральным Законом от 27.07.2008 года<br/>
+                        N152-ФЗ "О персональных данных" на условиях и для целей, определенных в этой<br/>
+                        заявке и в Политике конфиденциальности, -yandex.ru/legal/confidential-<br/>
+                        ознакомление с которой я подтверждаю, в течение срока, необходимого для<br/>
+                        достижения указанных целей, и 5 лет после их достижения.
+                    </td>
+                </tr>
+            </span>
+            <br/>
+            <tr align="center">
+                <td>
+                    <input type="submit" name="submit" onclick="return validateForm()"
+                           style="width:120px; height:28px; border:1px solid lightgrey; background:#ffe033"/>
+                </td>
+            </tr>
+            <br/>
+            <tr align="center">
+                <td>© 2019 Яндекс</td>
+            </tr>
+        </table>
     </form>
-    </div>
 </apex:page>
